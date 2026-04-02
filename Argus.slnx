@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Argus.Core/Argus.Core.csproj" />
+    <Project Path="src/Argus.Defender/Argus.Defender.csproj" />
+    <Project Path="src/Argus.Engine/Argus.Engine.csproj" />
+    <Project Path="src/Argus.GUI/Argus.GUI.csproj" />
+    <Project Path="src/Argus.Recovery/Argus.Recovery.csproj" />
+    <Project Path="src/Argus.Scanner/Argus.Scanner.csproj" />
+    <Project Path="src/Argus.Watchdog/Argus.Watchdog.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Argus.Core.Tests/Argus.Core.Tests.csproj" />
+    <Project Path="tests/Argus.Defender.Tests/Argus.Defender.Tests.csproj" />
+    <Project Path="tests/Argus.Engine.Tests/Argus.Engine.Tests.csproj" />
+    <Project Path="tests/Argus.Recovery.Tests/Argus.Recovery.Tests.csproj" />
+    <Project Path="tests/Argus.Scanner.Tests/Argus.Scanner.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,1 +1,28 @@
+# Build outputs
+bin/
+obj/
+publish/
+
+# User-specific VS/VS Code files
+*.user
+*.suo
+.vs/
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+
+# Secrets — NEVER commit these
+**/api_keys.json
+**/secrets.dat
+**/GuardConfig.json.local
+
+# Publish artifacts
+publish/
+
+# Logs and quarantine data
+*.log
+
+# Worktrees
 .worktrees/
