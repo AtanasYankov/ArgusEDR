@@ -4,21 +4,18 @@ using Argus.Watchdog;
 using Argus.Watchdog.IPC;
 using Serilog;
 
-// ── Logging ─────────────────────────────────────────────────────────────────
+// Logging
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File(
         Path.Combine(ArgusConstants.LogsDir, "watchdog-.log"),
         rollingInterval: RollingInterval.Day,
         retainedFileCountLimit: ArgusConstants.LogRetainedFileCountWatchdog,
         outputTemplate: ArgusConstants.LogOutputTemplate)
-    .WriteTo.Console()  // Useful for development; silent when running as service
+    .WriteTo.Console()
     .CreateLogger();
 
 try
 {
-    // ── HMAC Key for IPC authentication ─────────────────────────────────────
-    // In production, this key is created by the installer and DPAPI-protected.
-    // In development, generate a temporary key if the file doesn't exist.
     byte[] hmacKey;
     if (File.Exists(ArgusConstants.IpcKeyPath))
     {
@@ -28,7 +25,7 @@ try
     }
     else
     {
-        Log.Warning("IPC key not found at {Path} — generating ephemeral key (development mode)",
+        Log.Warning("IPC key not found at {Path} - generating ephemeral key (development mode)",
             ArgusConstants.IpcKeyPath);
         hmacKey = RandomNumberGenerator.GetBytes(32);
     }
@@ -38,6 +35,7 @@ try
         .UseSerilog()
         .ConfigureServices(services =>
         {
+            services.AddSingleton(hmacKey);
             services.AddSingleton(new WatchdogPipeServer(hmacKey));
             services.AddHostedService<WatchdogService>();
         })

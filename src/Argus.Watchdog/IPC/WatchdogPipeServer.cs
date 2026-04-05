@@ -17,7 +17,7 @@ public sealed class WatchdogPipeServer : IAsyncDisposable
     private readonly byte[] _hmacKey;
     private readonly CancellationTokenSource _cts = new();
 
-    public event EventHandler<PipeMessage>? MessageReceived;
+    public event EventHandler<(PipeMessage Message, NamedPipeServerStream Pipe)>? MessageReceived;
 
     public WatchdogPipeServer(byte[] hmacKey)
     {
@@ -97,12 +97,12 @@ public sealed class WatchdogPipeServer : IAsyncDisposable
                     continue;
                 }
 
-                MessageReceived?.Invoke(this, msg);
+                MessageReceived?.Invoke(this, (msg, pipe));
             }
         }
         catch (CryptographicException ex)
         {
-            Log.Warning(ex, "HMAC verification failed — possible spoofing attempt");
+            Log.Warning(ex, "HMAC verification failed - possible spoofing attempt");
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
