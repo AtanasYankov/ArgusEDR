@@ -1,0 +1,185 @@
+<UserControl x:Class="Argus.GUI.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Argus.GUI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vm:DashboardViewModel}">
+
+    <ScrollViewer Style="{StaticResource DarkScrollViewer}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Page Header -->
+            <StackPanel>
+                <TextBlock Text="Dashboard" FontSize="24" FontWeight="Bold"
+                           Foreground="{StaticResource TextPrimary}"/>
+                <TextBlock Text="System overview and protection status" FontSize="13"
+                           Foreground="{StaticResource TextMuted}" Margin="0 4 0 0"/>
+                <Border Height="1" Background="{StaticResource BorderDefault}" Margin="0 16 0 0"/>
+            </StackPanel>
+
+            <!-- Row 1: 3 Stat Cards (PROTECTION / THREATS / QUARANTINED) -->
+            <UniformGrid Grid.Row="1" Columns="3" Margin="0 16 0 0">
+                <UniformGrid.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="Margin" Value="0 0 8 0"/>
+                    </Style>
+                </UniformGrid.Resources>
+                <Border Margin="0 0 8 0" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Text="PROTECTION" FontSize="10" FontWeight="Bold"
+                                   Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Text="{Binding ProtectionStatus}" FontSize="22" FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0 8 0 0"/>
+                        <TextBlock Text="{Binding WatchdogStatus}" FontSize="11"
+                                   Foreground="{StaticResource TextSecondary}" Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+                <Border Margin="0 0 8 0" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Text="THREATS" FontSize="10" FontWeight="Bold"
+                                   Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Text="{Binding ThreatsDetected}" FontSize="22" FontWeight="Bold"
+                                   Foreground="{StaticResource TextBadgeRed}" Margin="0 8 0 0"/>
+                        <TextBlock Text="Detected" FontSize="11"
+                                   Foreground="{StaticResource TextSecondary}" Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource StatCard}" Margin="0 0 0 0">
+                    <StackPanel>
+                        <TextBlock Text="QUARANTINED" FontSize="10" FontWeight="Bold"
+                                   Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Text="{Binding QuarantinedItems}" FontSize="22" FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0 8 0 0"/>
+                        <TextBlock Text="Items isolated" FontSize="11"
+                                   Foreground="{StaticResource TextSecondary}" Margin="0 4 0 0"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- Quick Actions -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 16 0 0">
+                <StackPanel.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+                        <Setter Property="Margin" Value="0 0 8 0"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Content="Run Scan" />
+                <Button Content="Open Quarantine" />
+                <Button Content="Apply Privacy Guard" />
+                <Button Content="Check Definitions" Margin="0 0 0 0"/>
+            </StackPanel>
+
+            <!-- Row 2: 2 Stat Cards (LAST SCAN / FILES SCANNED) -->
+            <UniformGrid Grid.Row="3" Columns="2" Margin="0 16 0 0">
+                <Border Margin="0 0 8 0" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Text="LAST SCAN" FontSize="10" FontWeight="Bold"
+                                   Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Text="{Binding LastScanTime}" FontSize="18" FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0 8 0 0"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource StatCard}" Margin="0 0 0 0">
+                    <StackPanel>
+                        <TextBlock Text="FILES SCANNED" FontSize="10" FontWeight="Bold"
+                                   Foreground="{StaticResource TextMuted}"/>
+                        <TextBlock Text="{Binding FilesScanned}" FontSize="18" FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0 8 0 0"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- Row 3: Module Health + Activity Timeline -->
+            <Grid Grid.Row="4" Margin="0 16 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="60*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Module Health -->
+                <Border Grid.Column="0" Style="{StaticResource ContentCard}" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="MODULE HEALTH" FontSize="10" FontWeight="Bold"
+                                   Foreground="{StaticResource TextMuted}" Margin="0 0 0 12"/>
+                        <StackPanel Margin="0 0 0 8">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="10" Height="10" Fill="{StaticResource StatusGreen}"
+                                         VerticalAlignment="Center"/>
+                                <TextBlock Text="Watchdog" Foreground="{StaticResource TextPrimary}"
+                                           FontSize="13" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding WatchdogStatus}" Foreground="{StaticResource TextSecondary}"
+                                           FontSize="12" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Margin="0 0 0 8">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="10" Height="10" Fill="{StaticResource StatusGreen}"
+                                         VerticalAlignment="Center"/>
+                                <TextBlock Text="Defender" Foreground="{StaticResource TextPrimary}"
+                                           FontSize="13" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding DefenderStatus}" Foreground="{StaticResource TextSecondary}"
+                                           FontSize="12" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Margin="0 0 0 8">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="10" Height="10" Fill="{StaticResource StatusGreen}"
+                                         VerticalAlignment="Center"/>
+                                <TextBlock Text="Service" Foreground="{StaticResource TextPrimary}"
+                                           FontSize="13" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding ServiceLabel}" Foreground="{StaticResource TextSecondary}"
+                                           FontSize="12" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Recent Activity Timeline -->
+                <Border Grid.Column="2" Style="{StaticResource ContentCard}" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="RECENT ACTIVITY" FontSize="10" FontWeight="Bold"
+                                   Foreground="{StaticResource TextMuted}" Margin="0 0 0 12"/>
+
+                        <!-- Placeholder entries -->
+                        <StackPanel Margin="0 0 0 8" Orientation="Horizontal">
+                            <Border Width="2" Background="{StaticResource BorderDefault}" Margin="0 0 12 0"/>
+                            <StackPanel>
+                                <TextBlock Text="14:32 - Watchdog - Heartbeat OK"
+                                           Foreground="{StaticResource TextPrimary}" FontSize="12"/>
+                                <TextBlock Text="2 minutes ago"
+                                           Foreground="{StaticResource TextMuted}" FontSize="10" Margin="0 2 0 0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Margin="0 0 0 8" Orientation="Horizontal">
+                            <Border Width="2" Background="{StaticResource BorderDefault}" Margin="0 0 12 0"/>
+                            <StackPanel>
+                                <TextBlock Text="14:30 - Defender - File scan completed"
+                                           Foreground="{StaticResource TextPrimary}" FontSize="12"/>
+                                <TextBlock Text="4 minutes ago"
+                                           Foreground="{StaticResource TextMuted}" FontSize="10" Margin="0 2 0 0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Margin="0 0 0 8" Orientation="Horizontal">
+                            <Border Width="2" Background="{StaticResource BorderDefault}" Margin="0 0 12 0"/>
+                            <StackPanel>
+                                <TextBlock Text="14:15 - Scanner - Deep scan initiated"
+                                           Foreground="{StaticResource TextPrimary}" FontSize="12"/>
+                                <TextBlock Text="19 minutes ago"
+                                           Foreground="{StaticResource TextMuted}" FontSize="10" Margin="0 2 0 0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
